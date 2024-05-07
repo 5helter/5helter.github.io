@@ -1,0 +1,1171 @@
+<!DOCTYPE HTML>
+<html lang="CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="70多个函数，Linux常用系统调用一网打尽, 避难所">
+    <meta name="description" content="70多个函数，Linux系统调用一网打尽
+站在那儿别动，伙计！瞧你那一脸邋遢的络腮胡……那两根吊带，还有那洋洋得意的表情。十足一副高人一等的UNIX电脑用户的样子！
+——《UNIX环境高级编程》
+
+引言本文简单记录了一下5helter在使用">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>70多个函数，Linux常用系统调用一网打尽 | 避难所</title>
+    <link rel="icon" type="image/jpeg" href="/medias/logo.jpg">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.jpg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">避难所</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.jpg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">避难所</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://img2.imgtp.com/2024/05/01/p1e4axPp.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">70多个函数，Linux常用系统调用一网打尽</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Linux%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/">
+                                <span class="chip bg-color">Linux环境高级编程</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%B7%A5%E5%85%B7/" class="post-category">
+                                工具
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2023-05-07
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="70多个函数，Linux系统调用一网打尽"><a href="#70多个函数，Linux系统调用一网打尽" class="headerlink" title="70多个函数，Linux系统调用一网打尽"></a>70多个函数，Linux系统调用一网打尽</h1><blockquote>
+<p>站在那儿别动，伙计！瞧你那一脸邋遢的络腮胡……那两根吊带，还有那洋洋得意的表情。十足一副高人一等的UNIX电脑用户的样子！</p>
+<p align="right">——《UNIX环境高级编程》</p>
+</blockquote>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文简单记录了一下5helter在使用Linux系统调用中常用的函数，仅供参考，由于编辑本文时未使用markdown导致文章格式混乱，敬请谅解。本文持续更新中</p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><ol>
+<li><p>判断文件是否存在<br> int access(const char* pathname,int FLAG)<br> 调用时FLAG使用宏：F_OK 目录存在，R_OK文件存在，返回非零数</p>
+</li>
+<li><p>创建文件夹<br> bool mkdir(const char* pathname,int limit)<br> limit是文件夹权限，pathname是绝对路径</p>
+</li>
+<li><p>打开文件夹<br> DIR *opendir(const char *__name)<br> 打开失败返回空</p>
+</li>
+<li><p>读取目录中的文件<br> dirent *readdir(DIR *__dirp)<br> dirent类保存有目录信息，注意这个函数是每调用一次返回一个目录中的文件，直到没有文件时返回空</p>
+</li>
+<li><p>获取文件信息<br> int stat(const char *<strong>restrict</strong> __file, stat *<strong>restrict</strong> __buf)<br> stat类保存文件信息，返回值int为空时调用文件失败或权限不足等</p>
+</li>
+<li><p>重命名文件<br> int rename(const char *__old, const char *__new)<br> 这个函数相当于cp命令</p>
+</li>
+<li><p>删除文件或目录<br> int remove(const char *__filename)<br> 成功返回0，失败返回-1</p>
+</li>
+<li><p>设置文件时间<br> int utime(const char <em>__file, const utimbuf *__file_times)<br> 失败返回0<br> 其中utimbuf类型如下：<br>     struct utimbuf<br>     {<br>         time_t actime;		&#x2F;</em> Access time.  <em>&#x2F;<br>         time_t modtime;		&#x2F;</em> Modification time.  *&#x2F;<br>     };</p>
+</li>
+<li><p>重命名文件<br> int rename(const char *__old, const char *__new)<br> 注意__new的目录如果不存在，将返回失败</p>
+</li>
+<li><p>将UTC时间转化为本地时间（年月日结构体）<br>tm *localtime_r(const time_t *<strong>restrict</strong> __timer, tm *<strong>restrict</strong> __tp)<br>通过引用返回值<br>注意<br>sttm.tm_year&#x3D;sttm.tm_year+1900;                 &#x2F;&#x2F; tm.tm_year成员要加上1900。<br>sttm.tm_mon++;                                  &#x2F;&#x2F; sttm.tm_mon成员是从0开始的，要加1。</p>
+</li>
+<li><p>断开socket连接<br>int close(int __fd)<br>返回值：<br>    失败返回负，但是我们通常不会关系</p>
+</li>
+<li><p>通过主机名获取ip地址<br>hostent *gethostbyname(const char <em>__name)<br>struct hostent 是用于存储主机名和其相关的网络地址信息的结构体成员如下：<br>h_name: 官方的主机名。<br>h_aliases: 主机名的别名列表。<br>h_addrtype: 地址类型，通常是 AF_INET 表示IPv4。<br>h_length: 地址的长度。<br>h_addr: 主机地址的列表。对于IPv4，这通常作为(char</em>)使用，长度为h_length，网络序</p>
+</li>
+<li><p>创建套接字<br>int socket(int __domain, int __type, int __protocol)<br>参数解释：<br>    __domain填AF_INET表示IPV4<br>    __type	填的参数可以分为两部分<br>                第一部分填SOCK_STREAM或者SOCK_DGRAM分别表示流式SOCKET（tcp协议）和数据包SOCKET<br>                第二部分可以选择或上SOCK_CLOECEX和SOCK_NONBLOCK<br>    第三个参数填0(使用默认),也可以填IPPROTO_TCP&#x2F;IPPROTO_UDP<br>返回值：<br>函数返回套接字句柄，也是一个io文件，失败时返回-1</p>
+</li>
+<li><p>把本地序列转换为网络序<br>uint16_t htons(uint16_t __hostshort)<br>端口号通过这个转换<br>注意INADDR_ANY宏需要用htonl函数转换</p>
+</li>
+<li><p>流式socket连接到主机<br>int connect(int __fd, const sockaddr *__addr, socklen_t __len)<br>如果是tcp（流式socket基本上都是tcp，几乎没有列外）<br>__fd socket句柄<br>__addr 填充好的sockaddr_in对象<br>_t __len 填入sizeof(sockaddr_in)即可</p>
+</li>
+<li><p>接收报文函数<br>ssize_t recv(int __fd, void *__buf, size_t __n, int __flags)<br>参数解释：<br>这里只解释一下 __flags，其他参数同编号69，70两个函数<br>__flags	一般填0即可<br>返回读取到的字符数量，出错返回-1</p>
+</li>
+<li><p>发送报文函数<br>ssize_t send(int __fd, const void *__buf, size_t __n, int __flags)<br>参数情况同16，<br>返回值：<br>发送的字符数量，出错返回-1</p>
+</li>
+<li><p>设置socket选项<br>int setsockopt(int __fd, int __level, int __optname, const void *__optval, socklen_t __optlen)<br>参数解释：<br>__fd socket描述符<br>__level 网络层协议可选的选项有SOL_SOCKET(tcp&#x2F;udp 通用)IPPROTO_TCP IPPROTO_UDP<br>__optname  在该层要设置的属性，比如SO_REUSEADDR,SO_REUSEPORT,SO_KEEPALIVE(SOCK级别)，TCP_NODELAY(tcp级别)<br>__optval 选项设置的值，一般填值为1的整型变量,表示打开；当然填别的值的，根据__optname需要的参数决定<br>_t __optlen __optval的字节数，填sizeof(__optval)<br>返回值：<br>为负如果失败<br>说明：<br>此函数在在服务器端使用</p>
+</li>
+<li><p>将socket绑定到监听端口<br>int bind(int __fd, const sockaddr <em>__addr, socklen_t __len)<br>__addr是要监听的sockaddr_in，至少设置sin_family(协议) sin_addr.s_addr(地址） sin_port（端口） 三个成员<br>注意将sockaddr_in</em>强转为sockaddr*;<br>__len传入sizeof(sockaddr_in)<br>此函数在在服务器端使用，设置失败返回负数</p>
+</li>
+<li><p>socket监听<br>int listen(int __fd, int __n)<br>__n最大排队长度，超过可能会被拒绝连接<br>成功返回0，失败返回-1</p>
+</li>
+<li><p>阻塞等待客户端连接<br>int accept(int __fd, sockaddr *<strong>restrict</strong> __addr, socklen_t *<strong>restrict</strong> __addr_len)<br><strong>restrict</strong> __addr 传入一个sockaddr_in，指针，内容将被函数设置<br><strong>restrict</strong> __addr_len socklen_t类型是一个整数，填入sizeof(sockaddr_in)即可<br>返回与客户端连接的Socket描述符</p>
+</li>
+<li><p>创建子进程<br>int fork()<br>返回值：<br>主进程返回子进程的进程ID，是一个大于零的数，子进程返回0，出错返回-1<br>说明：<br>在Linux中，不同进程的socket id&#x2F;文件描述符 并不是共享的；也就是说，即使socket id&#x2F;文件描述符 是相同的，在不同的进程中代表的连接也是不同的；<br>默认情况下fork()函数不仅会复制socket id&#x2F;文件描述符 到子进程，也会新建对应连接，从子进程到对应的目标。(底层使用了引用计数器实现，socket id&#x2F;文件描述符会记录拥有这个连接的进程个数，close函数<br>是将个数减一，只有当计数为0时才会被关闭），如果创建Socket时指定了SOCK_CLOEXEC,那么子进程会关闭这个Sock</p>
+</li>
+<li><p>回收子进程资源<br>pid_t wait(int* status)<br>阻塞直到有子进程退出，status被设置为退出子进程状态，使用一些宏可转化为字符串查看<br>此函数在signal(SIGHID,SIG_DFL)下生效<br>signal(SIGHID,SIG_IGN)下失效，不过情况下系统自动回收资源，父进程繁忙时，将SIGHIDSIGHID绑定到处理函数，如需要；</p>
+</li>
+<li><p>设置环境变量<br>int setenv(const char *__name, const char *__value, int __replace)<br>下面以设置环境字符集为例子，程序字符集与数据库不兼容将导致数据库数据乱码；<br>第三个参数填1时，如果存在这个环境变量就用新值替代<br>第二个参数是值，字符集可以是 “Simplified Chinese_China.AL32UTF8”<br>第一个参数是环境变量名， 更改字符集填 “NLS_LANG”<br>这个设置只对当前用户的本次登录生效，重启后失效（写在.bashrc或者.bash_profile中才能永久生效)</p>
+</li>
+<li><p>select模型<br>int select(int nfds, fd_set* restrict readfds,fd_set <em>restrict writefds, fd_set</em> restrict errorfds,struct timeval* restrict timeout);&#x2F;&#x2F;restrict 关键字表示指针需要指向一个左值地址<br>参数解释：<br>fd_set*       readfds<br>    传递给select()一个设置好的fd_set对象的地址，用于监视读事件，若不监视填NULL; fd_set解释如下：<br>    socket集合，大小为1024位，作为位图使用；C语言使用以下四个函数操作位图：<br><br>    void FD_ZERO(fd_set *fdset);		&#x2F;&#x2F;初始化位图，将1024个位全部置为0<br>    void FD_SET(int fd, fd_set <em>fdset);	&#x2F;&#x2F;fd是描述符，把对应socket加入集合中（	其实是把对应位置置一，因此fd&lt;1024)<br>    void FD_CLR(int fd, fd_set <em>fdset);	&#x2F;&#x2F;把fd从位图中删除<br>        int FD_ISSET(int fd, fd_set <em>fdset);	&#x2F;&#x2F;判断fd是否在位图中，不在返回0，否则返回大于零的数<br><br>struct timeval</em> 	timeout<br>    超时时间，在超时时间内，若没有发生任何事件，select()函数返回，不再阻塞进程，如果填NULL或者0表示永远等待<br>        timeval结构体成员 int tv_sec 秒 int tv_usec 毫秒<br>        select事件分为读事件和写事件<br>        读事件包括<br>            1.监听<br>            2.读缓存中有数据<br>            3.收到close()申请<br>        写事件包括<br>            1.写缓冲区可写入数据<br>int 	nfds<br>    传递给select函数位图的实际大小<br>fd_set</em>       writefds<br>    传递给select()一个设置好的fd_set对象的地址，用于监视读事件，若不监视填NULL;<br>fd_set</em>	 errorfds<br>    传递给select()一个设置好的fd_set对象的地址，用于监视异常事件，若不监视填NULL;<br>函数返回值：<br>小于0:调用select失败，errno被设置（可能得原因有内存不足，参数错误，描述符异常，收到信号终止）<br>等于0；select超时<br>大于0；返回已经发生的事件数量，readfds&#x2F;writefds被修 修改的具体方式是，没有事件的socket fd位被清零<br>其他说明:<br>select函数判断是否有读写事件发生是通过检测socket的发送或接收缓冲区<br>应用经验：<br>水平触发：用select检测的socket发生了事件，立即返回<br>实际上可以在有事件触发时，先等一段时间再次检测后处理<br>由于每次select()函数都要更改位图，因此应该传递给select()一个临时位图每次循环前从复制源位图复制</p>
+</li>
+<li><p>poll模型<br>int poll(struct pollfd* fds, nfds_t nfds, int timeout);<br>参数解释：<br>pollfd* fds<br>    传入poll位图;<br>    poll模型使用数组作为位图，格式是：pollfd &lt;位图名&gt;[<constexpr number>]； constexpr number可取1024，2048等，但不要超过10000；<br>    其中pollfd 结构如下：<br>        struct pollfd {<br>                        int   fd;         &#x2F;* file descriptor <em>&#x2F;<br>                        short events;     &#x2F;</em> requested events <em>&#x2F;<br>                        short revents;    &#x2F;</em> returned events *&#x2F;<br>                    };<br>        参数解释：<br>            fd	socket描述符，poll认为-1代表没有socket<br>            events	选择要监听的事件，取值可以是POLLIN POLLOUT POLLDHUP POLLPRI(带外数据) POLLERR POLLHUP(挂起事件)<br>            revents	由poll()函数设置，revents与事件宏相与可以判断事件是否发生<br>nfds_t nfds<br>    传入一个整数，认为是监视socket的最大下标<br>int timeout<br>    超时事件，单位是毫秒<br>返回值：<br>小于0:调用poll失败，errno被设置（可能得原因有内存不足，参数错误，描述符异常，收到信号终止）<br>等于0；poll超时<br>大于0；返回已经发生的事件数量, 位图中每个pollfd 的revents被修改<br>开发经验：<br>位图的下标和fd的值一般相同，这样符合变成规范</p>
+</li>
+<li><p>epoll模型<br>int epoll_create(int size);<br>参数解释：<br>int size<br>    已弃用，填任意大于零的书<br>返回值：<br>返回一个epoll文件描述符(句柄)，是一个整数<br>控制epoll句柄的函数：<br>int epoll_ctl(int epfd, int op, int fd, struct epoll_event* event);<br>参数解释：<br>    int epfd :<br>        epoll句柄<br>    int op :<br>        对epoll进行的操作<br>            可选的选项有：EPOLL_CTL_ADD EPOLL_CTL_DEL EPOLL_CTL_MOD<br>    int fd :<br>        填入要监听的socket<br>    epoll_event* event :<br>        epoll_event  是epoll事件类型，定义如下：<br>            struct epoll_event<br>            {<br>                            uint32_t     events;      &#x2F;* Epoll events <em>&#x2F;<br>                            epoll_data_t data;        &#x2F;</em> User data variable <em>&#x2F;<br>                    };<br>            其中epoll_data定义如下：<br>                        typedef union epoll_data<br>                {<br>                                void        <em>ptr;<br>                                int          fd;<br>                                uint32_t     u32;<br>                                uint64_t     u64;<br>                        } epoll_data_t；<br>                一般epoll_data只需使用fd，并且将其设置为socket描述符即可；这里填的是什么，epoll_wait函数返回的就是什么；<br>            epoll_data_t data 设置为要监听的事件，可以是EPOLLIN EPOLLOUT EPOLLDHUP EPOLLPRI(带外数据) EPOLLERR EPOLLHUP(挂起事件)<br>    注意socket断开时EPOLL_CTL_DEL不是必须的，epoll会自动卸下<br> 使用epoll的函数：<br>int epoll_wait(int epfd, struct epoll_event</em> events,int maxevents, int timeout);<br>参数解释：<br>    int epfd :<br>        epoll句柄<br>    epoll_event</em> events：<br>        传入一个epoll_event数组，内容将被本函数设置<br>    int maxevents：<br>        传入events的数组长度<br>    int timeout：<br>        超时时间<br>返回值：<br>    小于0:调用epoll失败，errno被设置（可能得原因有内存不足，参数错误，描述符异常，收到信号终止）<br>    等于0；epoll超时<br>    大于0；返回已经发生的事件数量,即设置events中元素的个数<br>关闭epoll的函数<br>void close(int epfd);<br> epoll用完后需关闭</p>
+</li>
+<li><p>设置文件描述符状态<br>文件描述符(文键句柄)有很多状态，这些状态也由整数表示，并且可以使用 | 做添加运算<br>int fcntl(int fd, int cmd, … &#x2F;* arg *&#x2F;);<br>用于对文件描述符执行各种操作。它提供了一种在运行时控制文件描述符的方法，包括改变文件状态、设置文件描述符标志、以及执行各种其他操作<br>fd：表示文件描述符，<br>cmd：表示要执行的操作命令，是一个整数值。例如获取状态 F_GETFL 设置状态F_SETFL<br>arg：这是一个可选的参数，它取决于 cmd 参数的具体操作类型。根据不同的命令，arg 可能是一个整数、一个结构体指针，或者其他类型的数据。<br>    下面演示将socket文件描述符设置为非阻塞状态的例子：<br>        int setnonblocking(int fd)<br>        {<br>                int  flags;<br><br>                &#x2F;&#x2F; 获取fd的状态。<br>                if  ((flags&#x3D;fcntl(fd,F_GETFL,0))&#x3D;&#x3D;-1)<br>                    flags &#x3D; 0;<br><br>                return fcntl(fd,F_SETFL,flags|O_NONBLOCK);<br>        }<br>        非阻塞socket说明：非阻塞socket的connect recv send accept函数都不再阻塞，但是connect函数一定会返回失败这是返回的错误代码是EINPROGRESS；要通过检查socket是否可写检测连接是否成功<br>        在io复用模型中，connect recv send accept都必须是非阻塞的，任何阻塞操作交给poll或者epoll进行；代码如下：<br>            if (connect(sockfd, (struct sockaddr *)&amp;servaddr,sizeof(servaddr)) !&#x3D; 0)<br>            {<br>                        if (errno!&#x3D;EINPROGRESS)<br>                        {<br>                                printf(“connect(%s:%s) failed.\n”,argv[1],argv[2]); close(sockfd);  return -1;<br>                        }<br>                }<br><br>                pollfd fds;<br>                fds.fd&#x3D;sockfd;<br>                fds.events&#x3D;POLLOUT;<br>                poll(&amp;fds,1,-1);		&#x2F;&#x2F;负一表示一直等待<br>                if (fds.revents&#x3D;&#x3D;POLLOUT)<br>                        printf(“connect ok.\n”);<br>                else<br>                        printf(“connect failed.\n”);<br>        同样的问题还有非阻塞的accept，recv函数,使用下面的代码解决<br>            while (accept(listensock,0,0)&#x3D;&#x3D;-1)<br>                {<br>                            if (errno!&#x3D;EAGAIN)	&#x2F;&#x2F;EAGAIN表示缓冲区中无内容（send函数是被填满）<br>                                perror(“accept:”);   return -1;<br>                        else<br>                                break;<br>                }<br><br>        当然直接交给poll或者epoll等待accept和recv没有这么多事</p>
+</li>
+<li><p>epoll边缘触发模式<br>在向epoll句柄中添加epoll_event* event时，如果对齐成员events的赋值 |  	上EPOLLET 可设置为边缘触发，边缘触发不再通过检测缓冲区有无内容判断有无事件发生，而是通过等待期间缓冲区的变化判断<br>边缘触发模式一定要用循环处理事件，一次性把缓冲区处理干净；</p>
+</li>
+<li><p>定时器<br>unsigned alarm(unsigned seconds);<br>经过unsigned seconds向进程发送一个SIGALRM信号<br>返回值：<br>返回上一个alarm()调用剩余的秒数，如果没有返回0<br>alarm函数实际上是对计时器句柄的封装，创建按定时器句柄并用epoll监视alarm句柄代码如下：<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;<br>    &#x2F;&#x2F;把定时器加入epoll。<br>    int tfd&#x3D;timerfd_create(CLOCK_MONOTONIC,TFD_NONBLOCK|TFD_CLOEXEC);   &#x2F;&#x2F; 创建timerfd。<br>    struct itimerspec timeout;                                &#x2F;&#x2F; 定时时间的数据结构。<br>    memset(&amp;timeout,0,sizeof(struct itimerspec));<br>    timeout.it_value.tv_sec &#x3D; 10;                            &#x2F;&#x2F; 定时时间为10秒。<br>    timeout.it_value.tv_nsec &#x3D; 0;<br>    timerfd_settime(tfd,0,&amp;timeout,0);                  &#x2F;&#x2F; 开始计时。alarm(10)<br>    ev.data.fd&#x3D;tfd;                                                  &#x2F;&#x2F; 为定时器准备事件。<br>    ev.events&#x3D;EPOLLIN;<br>    epoll_ctl(epollfd,EPOLL_CTL_ADD,tfd,&amp;ev);     &#x2F;&#x2F; 把定时器fd加入epoll。<br>    &#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;<br><br>在epoll模型中，为了为了更新进程心跳或者清理空闲的客户端socket，一般会监视一个计时器事件，注意计时器句柄也是单次的，使用以下函数操控<br>        int timerfd_create(int clockid, int flags);<br><br>            int timerfd_settime(int fd, int flags,<br>                                    const struct itimerspec *new_value,<br>                                    struct itimerspec *old_value);<br><br>            int timerfd_gettime(int fd, struct itimerspec *curr_value);<br>此外epoll还监视信号和信号集，代码如下<br>        &#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;<br>        &#x2F;&#x2F;把信号加入epoll。<br>    sigset_t sigset;                                                     &#x2F;&#x2F; 创建信号集。<br>        sigemptyset(&amp;sigset);                                         &#x2F;&#x2F; 初始化（清空）信号集。<br>        sigaddset(&amp;sigset, SIGINT);                                &#x2F;&#x2F; 把SIGINT信号加入信号集。<br>        sigaddset(&amp;sigset, SIGTERM);                             &#x2F;&#x2F; 把SIGTERM信号加入信号集。<br>        sigprocmask(SIG_BLOCK, &amp;sigset, 0);                 &#x2F;&#x2F; 对当前进程屏蔽信号集（当前程将收不到信号集中的信号）。<br>        int sigfd&#x3D;signalfd(-1, &amp;sigset, 0);                       &#x2F;&#x2F; 创建信号集的fd。<br>        ev.data.fd &#x3D; sigfd;                                               &#x2F;&#x2F; 为信号集的fd准备事件。<br>        ev.events &#x3D; EPOLLIN;<br>        epoll_ctl(epollfd,EPOLL_CTL_ADD,sigfd,&amp;ev);     &#x2F;&#x2F; 把信号集fd加入epoll。<br>        &#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;</p>
+</li>
+<li><p>线程通信<br>线程通信有三种方式<br>1.发送信号，epoll可以监视信号<br>2.使用tcp通信<br>3.使用管道通信，管道通信是一种在本地上简易的通信方式，相比tcp</p>
+</li>
+<li><p>管道<br>int pipe(int *__pipedes)<br>解释：<br>此函数用于创建管道，管道是用户进程间通信是一个单向通信通道，数据只能从一个进程的输出端写入，然后从另一个进程的输入端读取<br>参数解释：<br>传入一个大小为2的整型数组<br>__pipedes[0]用于读取数据，__pipedes[1]用于写入数据<br>返回值：<br>如果执行成功，pipe函数返回0<br>如果执行失败，返回-1，并设置errno来指示错误类型</p>
+</li>
+<li><p>获取UTC时间<br>time_t time(time_t* <strong>now</strong>)<br>__now__被设置</p>
+</li>
+<li><p>errno&#x3D;&#x3D;EINTR错误<br>这个错误是，阻塞的系统调用（wait,accpt等）过程中，程序收到软中断导致的，防止这个错误的方法包括closeallioandsignal(true)</p>
+</li>
+<li><p>获取微秒精度时间<br>UTC时间，即time_t是精确到秒的，要获得微秒级时间需要使用下面的函数<br>int gettimeofday(struct timeval*tv, struct timezone *tz);<br>timezone *tz是需要设置的时区，填nullptr即可<br>timeval类型<br>    struct timeval{<br>        long int tv_sec; &#x2F;&#x2F; 秒数<br>        long int tv_usec; &#x2F;&#x2F; 微秒数<br>    }</p>
+</li>
+<li><p>clock()函数<br>获取程序消耗时钟数<br>发现clock()是程序从启动到函数调用占用CPU的时间。这个函数返回从“开启这个程序进程”到“程序中调用clock()函数”时之间的CPU时钟计时单元（clock tick）数<br>使用方法如下<br>    int i &#x3D; 100000000;<br>    clock_t start,finish; &#x2F;&#x2F;定义开始，结束变量<br>    start &#x3D; clock();&#x2F;&#x2F;初始化<br>    while( i– );<br>    finish &#x3D; clock();&#x2F;&#x2F;初始化结束时间<br>    double duration &#x3D; (double)(finish - start) &#x2F; CLOCKS_PER_SEC;&#x2F;&#x2F;转换浮点型<br>    printf( “%lf seconds\n”, duration );<br>该方法计算出程序所使用的时间</p>
+</li>
+<li><p>创建命名管道<br>int mkfifo(const char *pathname, mode_t mode);<br>匿名管道pipe只能由于父子进程或者线程之间通信<br>创建匿名管道可以用于进程间通信<br>    *pathname  普通的路径名，也就是创建后 FIFO 的名字<br>     mode ⽂件的权限，<br>     与打开普通⽂件的 open() 函数中的 mode 参数相同。(0666).</p>
+</li>
+<li><p>创建socket<br>int socket(int domain, int type, int protocal)<br>domain 参数⽤来指定协议族，⽐如 AF_INET，AF_LOCAL(本地进程间通信）<br>type 参数SOCK_STREAM和SOCK_DGRAM<br>protocal填0</p>
+</li>
+<li><p>创建线程<br>int pthread_create(pthread_t *thread, const pthread_attr_t *attr,void *(*start_routine) (void *), void *arg);<br>*thread穿入线程地址<br>attr	传入需要设置的pthread属性，可以填nullptr<br>void *(*start_routine) (void <em>)	传入线程函数指针，这个函数返回值和参数只能是void</em>，参数含义需要自己确定<br> arg	传入的线程函数的参数<br>返回值:小于零返回失败</p>
+</li>
+<li><p>回收非分离线程资源<br>int pthread_join(pthread_t thread, void **retval);<br>thread 传入线程id<br>retval 线程函数的返回值<br>返回值：线程函数的返回状态，自然退出返回0，取消返回负一，出错返回其他负数</p>
+</li>
+<li><p>线程函数返回<br>void pthread_exit(void* retval)<br>线程函数不可以用exit函数退出，这个函数等价于 return （void*)retval</p>
+</li>
+<li><p>初始化线程属性<br>int pthread_attr_init(pthread_attr_t *attr);<br>初始化一个线程属性结构体<br>返回值为负如果失败<br>注意：应先初始化线程属性，再pthread_create创建线程<br>成功: 0; 失败: 错误号.</p>
+</li>
+<li><p>设置线程属性<br>int pthread_attr_getdetachstate(const pthread_attr_t *attr, int *detachstate);<br>attr填要设置的属性<br>detachstate 填PTHREAD_CREATE_DATACHED可以设置为分离态</p>
+<pre><code>如果设置⼀个线程为分离线程创建，⽽这个线程运⾏⼜⾮常快，它很可能在pthread_create函数返回之前就终⽌
+</code></pre>
+<p>了，它终⽌以后就可能将线程号和系统资源移交给其他的线程使⽤，这样调⽤pthread_create的线程就得到<br>了错误的线程号<br>要避免这种情况可以采取⼀定的同步措施，最简单的⽅法之⼀是可以在 被创建的线程⾥ 调⽤pthread_cond_timedwait函数，<br>让这个线程等待⼀会⼉，留出⾜够的时间让函数pthread_create返回</p>
+</li>
+<li><p>设置线程为分离态<br>int phtread_detach(pthread_t thread);<br>这个函数可以在运行中设置，前面的方法只能在创建线程前设置</p>
+</li>
+<li><p>获取本线程id<br>pthread_t pthread_self()</p>
+</li>
+<li><p>取消线程<br>int pthread_cancel(pthread_t thread)</p>
+</li>
+<li><p>线程清理<br>void pthread_cleanup_push(void (*routine)(void *),void *arg);<br>线程退出前调用此函数进行善后，压入一个在线程退出前执行pthread_cleanup_pop就会执行对应的栈顶函数<br>void pthread_cleanup_pop(int execute);<br>pthread_cleanup_push和pthread_cleanup_pop在线程函数中必须成对出现，否则编译出错<br>execute函数<br>    填0弹出不执行，填大于零的数弹出并执行<br>线程退出前，压到栈中的清理函数会被执行，无论其是否执行到pthread_cleanup_pop</p>
+</li>
+<li><p>向发送信号<br>int pthread_kill(pthread_t thread, int sig)<br>参数解释：<br>    thread:<br>        线程id<br>    sig：<br>        发送的信号<br>返回值：<br>    为负如果失败<br>说明：<br>    使用这个函数直接对线程发信号，会使对应线程中断<br>    向进程发送的信号并不会中断子线程，主线程和子线程共享信号处理函数，你可在任何线程调用signal函数改变信号处理器<br>    因此可以说线程缺少对信号的支持，用信号进行线程间通信是困难的<br>主线程(进程)向子线程发送信号：</p>
+</li>
+<li><p>获取系统线程id<br>int syscall(int number, …);<br>说明：<br>在多线程中，pthread_self()函数获得的线程号是pthread库对线程的编号，而不是Linux系统对线程的编号。这个线程号只在本进程可用在别的进程中可能会被重用<br>pthread_create()返回的线程号，使用top命令是查不到的，top显示的是Linux的线程号，syscall(SYS_gettid)返回的线程号，在系统中任意一个时刻是唯一的，<br>置得注意到是，在主线程中调用getpid()得到的值与主线程中调用syscall(SYS_gettid)得到的值一致，返回值类型是pid_t<br>该函数的一个典型用法是<br>    获取的方法数是syscall(SYS_gettid)，</p>
+</li>
+<li><p>销毁线程<br>int pthread_attr_destroy(pthread_attr_t *attr);<br>attr 线程属性结构体<br>成功: 0; 失败: 错误号</p>
+</li>
+<li><p>获取线程状态<br>int pthread_attr_getdetachstate(const pthread_attr_t *attr, int *detachstate);<br>从attr中获取对应属性</p>
+</li>
+<li><p>设置栈空间<br>int pthread_attr_setstack(pthread_attr_t *attr, void *stackaddr, size_t stacksize);</p>
+</li>
+<li><p>获取栈空间<br>int pthread_attr_getstack(pthread_attr_t *attr, void *stackaddr, size_t stacksize);</p>
+</li>
+<li><p>socket对<br>int socketpair(int domain, int type, int protocol, int sv[2]);</p>
+</li>
+<li><p>eventfd线程间通信<br>int eventfd(unsigned int initval, int flags);<br>这个是用于线程间通信的新方法，效率高于管道，使用方法完全等同于普通文件描述符</p>
+</li>
+<li><p>初始化信号量（posix型，一般用于线程通信）<br>sint sem_init(sem_t *sem, int pshared, unsigned int value);<br>参数解释：<br>sem_t *sem	需要初始化的信号量指针，左值，一般直接创建然后取地址传递即可<br>int pshared	传入0代表在线程间使用，一般是全局变量即可，传入1代表线程间使用，必须在共享内存区创建sem_t，具体方法后面说<br>unsigned int value	初始值，一般的初始值设置为零可以用于确定某操作必须限于某操作；设置为1相当于互斥锁</p>
+</li>
+<li><p>信号量P操作<br>sem_post(sem_t *sem)<br>这个不解释，参考计算机操作系统课程</p>
+</li>
+<li><p>信号量V操作<br>sem_wait(sem_t *sem)<br>这个不解释，参考计算机操作系统课程</p>
+</li>
+<li><p>存储映射IO(PosiX)<br>void *mmap(void <em>addr, size_t length, int prot, int flags,int fd, off_t offset);<br>参数解释：<br>addr	映射到的偏移地址，一般填NULL由系统设置即可<br>length	需要映射的长度(一个正数)，一般需要小于文件大小，如果大小不对，将收到SIGBUS错误信号<br>prot	文件属性，可选PROT_WRITE,PROT_READ,PROT_EXEC,在MAP_SHARED模式下打开的文件描述符必须设置为大于这里的权限，否则会出参数错误，而MAP_PRIVATE则不需要，因为不会写道文件里<br>flags	MAP_SHARED和MAP_PRIVATE，多进程用前者，后者不会把内存中的值写到文件中，MAP_ANONYMOUS用于创建匿名映射，此时fd设置为-1<br>fd		打开的文件描述符，改函数建立映射后可立即关闭fd<br>offset	偏移量，必须为4k的整数倍，填零即可<br>返回值：<br>失败时返回(void</em>)-1;<br>用法：<br>可以进行父子进程通信，需要设置MAP_SHARED<br>也可以用于非亲缘关系的进程间通信，映射到同一个文件即可，显然不能创建匿名的<br>unix和系统中有两个特殊的文件&#x2F;dev&#x2F;zreo和&#x2F;dev&#x2F;null前者可以读无限个空洞，后者可以无限写入</p>
+</li>
+<li><p>设置文件偏移量<br>off_t lseek(int fd, off_t offset, int whence);<br>参数解释：<br>fd	打开的文件描述符<br>offset	偏移量字节为单位<br>whence	开始计算偏移的起始位置，可选SEEK_SET，SEEK_END，SEEK_CUR<br>返回值：<br>失败时返回-1;成功时返回较文件起始位置的偏移总量<br>用法：处理用于设置偏移，还常用于创建文件空洞，<br>如果总偏移位置大于了文件大小，不足的部分将由空洞补充，在空洞后面写入一个字符可以是\0，此次空洞将被保存到文件中，空洞不能被读到，但是可以用于存储映射IO</p>
+</li>
+<li><p>打开文件<br>int open(const char *pathname, int flags);<br>int open(const char *pathname, int flags, mode_t mode);<br>这个函数不解释</p>
+</li>
+<li><p>修改文件大小<br>int ftruncate(int fd, off_t  length)<br>源文件长度如果不足，系统将用空洞填充</p>
+</li>
+<li><p>释放映射区<br>int munmap(void *addr, size_t length);<br>参数解释：<br>    addr起始地址<br>    length大小<br>返回值：<br>    成功返回0，失败返回-1<br>用法：<br>    释放映射区时内存数据才会真正被写到文件，如果要提前写入调用msync(2)函数，否则写入将被从文件上撤销</p>
+</li>
+<li><p>创建或者打开共享内存&#x2F;在交换分区上的内存映射创建<br>int shmget(key_t key, size_t size, int shmflg);<br>参数解释：<br>key		用于标识共享内存，共享内存编号不可以相同，一般由程序员设置一个十六进制数<br>size	创建共享内存的大小<br>shmflg	访问权限同open的mode参数<br>返回值：<br>失败时返回-1;返回共享内存的标识<br>用法：<br>也叫systemV型内存映射，特点是不能在文件系统中直接看到文件实体，只能通过ipcs -sa 命令查看，这种文件可以防止运行中文件被误删<br>            使用ipcrm shm [shmid]删除共享内存<br>我这里给出一个典型用法：<br>    int shmid&#x3D;shmget((key_t)0X5005,1024,0640|IPC_CREATE);&#x2F;&#x2F;创建shmid得角色类似于fd，key_t的角色类似于文件名
+    </p>
+</li>
+<li><p>连接共享内存到程序内存空间<br>void *shmat(int shmid, const void <em>shmaddr, int shmflg);<br>参数解释：<br>shmid	共享内存标识<br>shmaddr	可以填空，让系统决定起始位置<br>shmflg	标志位填0即可<br>返回值：<br>返回指向映射的第一个地址，出错返回(void</em>)-1</p>
+</li>
+<li><p>从进程中分离共享内存<br>int shmdt(const void *shmaddr);<br>参数解释：<br>shmaddr	shmat返回的地址<br>返回值：<br>出错返回负一</p>
+</li>
+<li><p>共享内存控制<br>int shmctl(int shmid, int cmd, struct shmid_ds *buf);<br>参阅linux程序员手册<br>    我们这里了解一种用法即可<br>        shmctl(shmid,IPC_RMID,0)<br>    用于删除共享内存</p>
+</li>
+<li><p>信号量集创建或者获取(systemV型，可用于多进程)<br>int semget(key_t key, int nsems, int semflg);<br>参数解释：<br>key		用于标识信号量集，信号量编号不可以相同，一般由程序员设置一个十六进制数<br>nsems	信号量的个数<br>semflg	同open函数的mode，可以使用IPC_CREAT标记用于创建	<br>返回值：<br>返回semid，失败时返回-1<br>PosiX型信号量又叫信号灯一般适用于多线程程序，而systemV型是基于共享内存的，可以在进程间通信<br>使用ipcs -s命令查看创建的信号量	ipcrm sem <semid>可以删除信号量</p>
+</li>
+<li><p>信号量控制<br>int semctl(int semid, int semnum, int cmd, …);<br>参数解释：<br>semid	semget的返回值<br>semnum	当前要控制信号量集中的第几个信号量，第一个填0，第二个填1<br>cmd		常用的有两个IPC_RMID,SETVAL,GETVAL分别表示删除信号量,设置初始值,获取信号量当前值<br>…		一个共用体，结构如下：<br>        union semun {<br>            int              val;    &#x2F;* Value for SETVAL *&#x2F;<br>            struct semid_ds <em>buf;    &#x2F;</em> Buffer for IPC_STAT, IPC_SET *&#x2F;<br>            unsigned short  <em>array;  &#x2F;</em> Array for GETALL, SETALL *&#x2F;<br>            struct seminfo  <em>__buf;  &#x2F;</em> Buffer for IPC_INFO<br>                                        (Linux-specific) *&#x2F;<br>        };<br>        一般使用它的val成员就可以,表示信号量的初始值<br>        注意这个共用体必须程序员自己定义<br>返回值：<br>失败返回-1</p>
+</li>
+<li><p>信号量操作<br>int semop(int semid, struct sembuf *sops, unsigned nsops);<br>参数解释：<br>semid	semget的返回值<br>sops	结构体如下：<br>        struct sembuf<br>        {<br>            short sem_num;		&#x2F;&#x2F;信号量在信号量集中的位置<br>            short sem_post		&#x2F;&#x2F;-1等待，+1发送<br>            short sem_flg		&#x2F;&#x2F;把此标志SEM_UNDO系统将跟踪这个信号量，如果进程结束没有释放信号量，系统将自动释放<br>                        &#x2F;&#x2F;如果用于控制进程顺序，这个字段填零<br>        }<br>    sops可以是一个sembuf的地址也可以是sembuf的数组首地址，即可以同时对多个信号量集操作<br>nsops	要操作的信号量集数，如果sops是一个sembuf的地址，这个值填1<br>返回值：<br>为负如果失败</p>
+</li>
+<li><p>读IO<br>ssize_t read(int fd, void *buf, size_t count);<br>参数解释：<br>fd		文件描述符<br>buf		读入到的起始位置<br>count	要读入的字节数<br>返回值：<br>ssize_t是一个有符号整数，返回的是成功读取的字节数，读取失败返回负数</p>
+</li>
+<li><p>写IO<br>ssize_t write(int fd, const void *buf, size_t count);<br>参数解释：<br>fd		文件描述符<br>buf		写入的起始位置<br>count	要写入的字节数<br>返回值：<br>ssize_t是一个有符号整数，返回的是成功写入的字节数，读取失败返回负数</p>
+</li>
+<li><p>从IO读入到非连续空间<br>ssize_t readv(int fd, const struct iovec *iov, int iovcnt);<br>参数解释：<br>fd	文件描述符<br>iov	iovec数组，iovec类型用于描述内存空间，结构如下<br>    struct iovec {<br>       void  <em>iov_base;    &#x2F;</em> Starting address <em>&#x2F;<br>       size_t iov_len;     &#x2F;</em> Number of bytes to transfer *&#x2F;<br>    };<br>    成员解释：<br>        iov_base	内存的起始地址<br>        iov_len		内存的长度<br>iovcnt	参数二中数组长度是多少这里填几<br>返回值：<br>函数调用成功时返回读，失败时返回 -1 并设置相应的 errno</p>
+</li>
+<li><p>从非连续空间写入IO<br>ssize_t writev(int fd, const struct iovec *iov, int iovcnt);<br>返回值：<br>函数调用成功时返回读，失败时返回 -1 并设置相应的 errno</p>
+</li>
+</ol>
+<p>	</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">5helter</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://example.com/2023/05/07/70%E5%A4%9A%E4%B8%AA%E5%87%BD%E6%95%B0%EF%BC%8CLinux%E5%B8%B8%E7%94%A8%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E4%B8%80%E7%BD%91%E6%89%93%E5%B0%BD/">http://example.com/2023/05/07/70%E5%A4%9A%E4%B8%AA%E5%87%BD%E6%95%B0%EF%BC%8CLinux%E5%B8%B8%E7%94%A8%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E4%B8%80%E7%BD%91%E6%89%93%E5%B0%BD/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint policy. If reproduced, please indicate source
+                    <a href="/about" target="_blank">5helter</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Linux%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/">
+                                    <span class="chip bg-color">Linux环境高级编程</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/2023/05/07/%E8%AF%BB%E8%80%85%E5%86%99%E8%80%85%E9%97%AE%E9%A2%98/">
+                    <div class="card-image">
+                        
+                        <img src="https://img2.imgtp.com/2024/05/07/mYmplY43.jpg" class="responsive-img" alt="读者写者问题">
+                        
+                        <span class="card-title">读者写者问题</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-05-07
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%AE%9E%E9%AA%8C/" class="post-category">
+                                    实验
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%AE%9E%E6%88%98/">
+                        <span class="chip bg-color">实战</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%B9%B6%E5%8F%91%E7%A8%8B%E5%BA%8F/">
+                        <span class="chip bg-color">并发程序</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/04/30/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="逐步实现带简单的智能指针，理解CPP智能指针底层原理！">
+                        
+                        <span class="card-title">逐步实现带简单的智能指针，理解CPP智能指针底层原理！</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-04-30
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%8E%A2%E7%A9%B6/" class="post-category">
+                                    探究
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/C-11/">
+                        <span class="chip bg-color">C++11</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + 'From: 避难所<br />'
+            + 'Author: 5helter<br />'
+            + 'Link: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2024</span>
+            
+            <a href="/about" target="_blank">5helter</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;Total visits:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;Total visitors:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/5helter/" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=320630369" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 320630369" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+    
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
